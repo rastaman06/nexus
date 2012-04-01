@@ -10,10 +10,14 @@ import java.nio.channels.SocketChannel;
 
 import org.eclipse.jetty.http.HttpException;
 import org.eclipse.jetty.io.Connection;
-import org.eclipse.jetty.io.nio.SelectChannelEndPoint;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.HttpConnection;
+import org.eclipse.jetty.io.AsyncEndPoint;
+import org.eclipse.jetty.io.Connection;
+import org.eclipse.jetty.io.nio.AsyncConnection;
+import org.eclipse.jetty.server.AsyncHttpConnection;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -95,8 +99,8 @@ public class GWTConnectionManager
         }
 
         @Override // from SelectChannelConnector
-        protected Connection newConnection (SocketChannel chan, SelectChannelEndPoint ep) {
-            return new HttpConnection(this, ep, getServer()) {
+        protected AsyncConnection newConnection (SocketChannel chan, AsyncEndPoint ep) {
+             return new AsyncHttpConnection(this, ep, getServer()) {                
                 @Override public Connection handle () throws IOException {
                     try {
                         return super.handle();
